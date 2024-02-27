@@ -3,6 +3,7 @@ from src.company_data_collector.seedwork.domain.repositories import Mapper as Re
 from src.company_data_collector.modules.company.domain.entities import Company
 from .dto import CompanyDTO
 
+
 class MapperCompanyDTOJson(AppMap):
 
     def outer_to_dto(self, outer: dict) -> CompanyDTO:

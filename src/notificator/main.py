@@ -1,8 +1,10 @@
-import pulsar, _pulsar
-from pulsar.schema import *
-import uuid
-import time
 import os
+import time
+import uuid
+
+import _pulsar
+import pulsar
+from pulsar.schema import *
 
 
 def time_millis():
@@ -34,7 +36,7 @@ HOSTNAME = os.getenv('PULSAR_ADDRESS', default="localhost")
 client = pulsar.Client(f'pulsar://{HOSTNAME}:6650')
 consumer = client.subscribe('events-company',
                             consumer_type=_pulsar.ConsumerType.Shared,
-                            subscription_name='sub-notificator-events-company-collector',
+                            subscription_name='sub-notificator-company-collector-events',
                             schema=AvroSchema(CompanyDataCollectedEvent))
 
 while True:
@@ -43,5 +45,4 @@ while True:
     print("Message Receive:  '%s'" % msg.value().data)
     print('=========================================')
     consumer.acknowledge(msg)
-
 client.close()

@@ -1,5 +1,5 @@
 from .entities import Company
-from .rules import MinimoUnItinerario
+from .rules import IsValidDataFormat
 from .exceptions import ObjectTypeNotExistInDomainCompanyException
 from src.company_data_collector.seedwork.domain.repositories import Mapper, Repository
 from src.company_data_collector.seedwork.domain.factories import Factory
@@ -16,6 +16,6 @@ class CompanyFactory(Factory):
         else:
             company: Company = mapper.dto_to_entity(obj)
 
-            self.validate_rule(MinimoUnItinerario(reserva.itinerarios))
+            validate_rule(IsValidDataFormat(company))
 
             return company

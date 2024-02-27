@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from .rules import IdEntityIsImmutable
-from .exceptions import ImmutableIdException
+from .exceptions import IdMustBeImmutableException
 from datetime import datetime
 import uuid
 
@@ -22,5 +22,5 @@ class DomainEvent:
     @id.setter
     def id(self, id: uuid.UUID) -> None:
         if not IdEntityIsImmutable(self).is_valid():
-            raise ImmutableIdException()
+            raise IdMustBeImmutableException()
         self._id = self.next_id()

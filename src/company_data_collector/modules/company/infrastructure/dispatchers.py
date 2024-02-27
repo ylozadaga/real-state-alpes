@@ -1,8 +1,8 @@
 import pulsar
 from pulsar.schema import *
-from src.company_data_collector.modules.company.intrastructure.schema.v1.events import (EventCompanyCreated,
+from src.company_data_collector.modules.company.infrastructure.schema.v1.events import (EventCompanyCreated,
                                                                                         CompanyCreatedPayload)
-from src.company_data_collector.modules.company.intrastructure.schema.v1.commands import (CommandCreateCompany,
+from src.company_data_collector.modules.company.infrastructure.schema.v1.commands import (CommandCreateCompany,
                                                                                           CommandCreateCompanyPayload)
 from src.company_data_collector.seedwork.infrastructure import utils
 

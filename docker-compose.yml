@@ -2,14 +2,14 @@ version: '3'
 networks:
   pulsar:
     driver: bridge
-  sidecar:
+  app:
     driver: bridge
-services:
 
+services:
 # Start zookeeper
   zookeeper:
     image: apachepulsar/pulsar:latest
-    profiles: ["pulsar"]
+    profiles: [ "pulsar" ]
     container_name: zookeeper
     restart: on-failure
     networks:
@@ -33,7 +33,7 @@ services:
     container_name: pulsar-init
     hostname: pulsar-init
     image: apachepulsar/pulsar:latest
-    profiles: ["pulsar"]
+    profiles: [ "pulsar" ]
     networks:
       - pulsar
     command: >
@@ -50,7 +50,7 @@ services:
 # Start bookie
   bookie:
     image: apachepulsar/pulsar:latest
-    profiles: ["pulsar"]
+    profiles: [ "pulsar" ]
     container_name: bookie
     restart: on-failure
     networks:
@@ -73,7 +73,7 @@ services:
 # Start broker
   broker:
     image: apachepulsar/pulsar:latest
-    profiles: ["pulsar"]
+    profiles: [ "pulsar" ]
     container_name: broker
     hostname: broker
     restart: on-failure
@@ -100,21 +100,44 @@ services:
       &&  exec bin/pulsar broker"
 
 # real state alpes services
+  rs-alpes_db:
+    image: postgres:latest
+    container_name: rs-alpes_db
+    profiles: [ "rs-alpes" ]
+    hostname: rs-alpes_db
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: rs-alpes
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app
+
   rs-alpes:
     container_name: rs-alpes
     hostname: rs-alpes
-    image: rs-alpes/flask
-    profiles: ["rs-alpes", "company_data_collector"]
+    build:
+      context: .
+      dockerfile: rs-alpes.Dockerfile
+    profiles: [ "rs-alpes" ]
     networks:
-      - sidecar
       - pulsar
-    labels:
-      SidecarDiscover: "false"
+      - app
     depends_on:
-      - broker
+      rs-alpes_db:
+        condition: service_healthy
     environment:
       - RS_ALPES_ADDRESS=rs-alpes
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/rs-alpes
       - PULSAR_ADDRESS=broker
+      - BROKER_HOST=broker
     ports:
       - "5000:5000"
 
@@ -122,13 +145,16 @@ services:
   notificator:
     container_name: notificator
     hostname: notificator
-    image: rs-alpes/notificator
-    profiles: ["rs-alpes", "notificator"]
+    build:
+      context: .
+      dockerfile: notificator.Dockerfile
+    profiles: [ "notificator" ]
+    networks:
+      - pulsar
     depends_on:
       - rs-alpes
       - broker
     environment:
       - RS_ALPES_ADDRESS=rs-alpes
       - PULSAR_ADDRESS=broker
-    networks:
-      - pulsar
+

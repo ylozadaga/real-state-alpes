@@ -53,7 +53,7 @@ docker build . -f notificator.Dockerfile -t rs-alpes/notificator
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-docker run src/notificator
+docker run rs-alpe/notificator
 ```
 
 ## Docker-compose
@@ -68,4 +68,29 @@ Si desea detener el ambiente ejecute:
 
 ```bash
 docker-compose stop
+```
+
+
+## Desplegar Solo Apache Pulsar
+
+Para desplegar solo los servicios de Apache Pulsar, usamos:
+
+```bash
+docker-compose --profile pulsar up
+```
+
+## Desplegar Solo el Microservicio de recolección de datos
+
+Para desplegar solo el microservicio de recoleccion de datos, usamos:
+
+```bash
+docker-compose --profile rs-alpes up
+```
+
+## Desplegar Solo el Microservicio de notificaciones
+
+Para desplegar solo el microservicio de notificaciones, usamos:
+
+```bash
+docker-compose --profile notificator up
 ```

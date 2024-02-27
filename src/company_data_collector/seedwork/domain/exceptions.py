@@ -5,7 +5,7 @@ class DomainException(Exception):
     ...
 
 
-class ImmutableIdException(DomainException):
+class IdMustBeImmutableException(DomainException):
 
     def __init__(self, message='id must be immutable'):
         self.__message = message

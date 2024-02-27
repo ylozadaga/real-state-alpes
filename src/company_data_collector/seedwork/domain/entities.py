@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
+from .events import DomainEvent
+from .mixins import ValidateRulesMixin
 from .rules import IdEntityIsImmutable
-from .exceptions import ImmutableIdException
+from .exceptions import IdMustBeImmutableException
 from datetime import datetime
 import uuid
 
@@ -24,5 +26,16 @@ class Entity:
     @id.setter
     def id(self, id: uuid.UUID) -> None:
         if not IdEntityIsImmutable(self).is_valid():
-            raise ImmutableIdException()
+            raise IdMustBeImmutableException()
         self._id = self.next_id()
+
+
+@dataclass
+class RootAggregation(Entity, ValidateRulesMixin):
+    events: list[DomainEvent] = field(default_factory=list)
+
+    def add_event(self, event: DomainEvent):
+        self.events.append(event)
+
+    def clear_events(self):
+        self.events = list()

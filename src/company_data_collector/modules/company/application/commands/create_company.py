@@ -7,7 +7,7 @@ from src.company_data_collector.seedwork.application.commands import execute_com
 from src.company_data_collector.modules.company.domain.entities import Company
 from src.company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
 from src.company_data_collector.modules.company.application.mappers import CompanyMapper
-from src.company_data_collector.modules.company.intrastructure.repositories import CompanyRepository
+from src.company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
 
 
 @dataclass
@@ -21,6 +21,17 @@ class CreateCompany(Command):
     validity: str
     organization_type: str
     registration_category: str
+
+    def __init__(self, company_dto: CompanyDTO):
+        self.id = company_dto.id
+        self.registration_date = company_dto.registration_date
+        self.renovation_date = company_dto.renovation_date
+        self.nit = company_dto.nit
+        self.acronym = company_dto.acronym
+        self.status = company_dto.status
+        self.validity = company_dto.validity
+        self.organization_type = company_dto.organization_type
+        self.registration_category = company_dto.registration_category
 
 
 class CreateCompanyHandler(CreateCompanyBaseHandler):

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, url_for, redirect, jsonify, session
+from flask import Flask, jsonify
 from flask_swagger import swagger
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -11,12 +11,12 @@ def record_handlers():
 
 
 def import_alchemy_models():
-    import src.company_data_collector.modules.company.intrastructure.dto
+    import src.company_data_collector.modules.company.infrastructure.dto
 
 
 def start_consumer():
     import threading
-    import src.company_data_collector.modules.company.intrastructure.consumers as company
+    import src.company_data_collector.modules.company.infrastructure.consumers as company
 
     threading.Thread(target=company.subscribe_to_events()).start()
 
@@ -26,8 +26,8 @@ def start_consumer():
 def create_app(config={}):
     app = Flask(__name__, instance_relative_config=True)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = \
-        'sqlite:///' + os.path.join(basedir, 'database.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL',
+                                                      'sqlite:///' + os.path.join(basedir, 'rs-alpes.db'))
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
@@ -54,7 +54,7 @@ def create_app(config={}):
     def spec():
         swag = swagger(app)
         swag['info']['version'] = "1.0"
-        swag['info']['title'] = "My API"
+        swag['info']['title'] = "Real State Alpes API"
         return jsonify(swag)
 
     @app.route("/health")
