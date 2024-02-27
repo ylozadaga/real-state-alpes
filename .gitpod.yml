@@ -1,0 +1,34 @@
+tasks:
+  - name: Install Python
+    init: > 
+      pyenv install 3.10.7 -f &&
+      pyenv local 3.10.7 &&
+      gp sync-done bundle
+  - name: Install dependencies
+    init: gp sync-await bundle
+    command: pip install -r requirements.txt
+  - name: Create Docker Images
+    init: > 
+      docker build . -f rs-alpes.Dockerfile -t rs-alpes/flask &&
+      docker build . -f notificator.Dockerfile -t rs-alpes/notificator &&
+      gp sync-done images
+  - name: Create Data Folder and Grand Permissions
+    init: > 
+      mkdir -p data/bookkeeper && 
+      mkdir -p data/zookeeper && 
+      sudo chmod -R 777 ./data
+  - name: Docker Compose Pull
+    init: gp sync-await images
+    command: docker-compose pull
+
+ports:
+  - port: 2181
+    onOpen: ignore
+  - port: 8080
+    onOpen: ignore
+  - port: 6650
+    onOpen: ignore
+  - port: 2181
+    onOpen: ignore
+  - port: 6650
+    onOpen: ignore

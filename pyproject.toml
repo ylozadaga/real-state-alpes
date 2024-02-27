@@ -1,0 +1,20 @@
+[project]
+name = "rs-alpes"
+version = "1.0.0"
+authors = [
+  { name="Alejandro Russi", email="f.russi@uniandes.edu.co" },
+  { name="Diego Eslava", email="d.eslava@uniandes.edu.co" },
+  { name="Marlon Agon", email="m.agonf@uniandes.edu.co" },
+  { name="Yosef Lozada", email="y.lozada@uniandes.edu.co" },
+]
+description = "POC RS Alpes"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = [
+  ".", "src",
+]
