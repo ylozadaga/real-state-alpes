@@ -8,8 +8,7 @@ Base = db.declarative_base()
 
 
 class Company(db.Model):
-    __tablename__ = "reservas"
+    __tablename__ = "companies"
     id = db.Column(db.String, primary_key=True)
-    fecha_creacion = db.Column(db.DateTime, nullable=False)
-    fecha_actualizacion = db.Column(db.DateTime, nullable=False)
-    itinerarios = db.relationship('Itinerario', secondary=reservas_itinerarios, backref='reservas')
+    creation_date = db.Column(db.DateTime, nullable=False)
+    update_date = db.Column(db.DateTime, nullable=False)

@@ -60,7 +60,7 @@ class UnidadTrabajo(ABC):
     def savepoint(self):
         raise NotImplementedError
 
-    def registrar_batch(self, operacion, *args, lock=Lock.PESIMISTA, **kwargs):
+    def registrar_batch(self, operacion, *args, lock=Lock.PESSIMISTIC, **kwargs):
         batch = Batch(operacion, lock, *args, **kwargs)
         self.batches.append(batch)
         self._publicar_eventos_dominio(batch)
@@ -114,7 +114,7 @@ def guardar_unidad_trabajo(uow: UnidadTrabajo):
         raise Exception('No hay unidad de trabajo')
 
 
-class UnidadTrabajoPuerto:
+class UnitWorkPort:
 
     @staticmethod
     def commit():
@@ -140,7 +140,7 @@ class UnidadTrabajoPuerto:
         return uow.savepoints()
 
     @staticmethod
-    def registrar_batch(operacion, *args, lock=Lock.PESIMISTA, **kwargs):
+    def register_batch(operacion, *args, lock=Lock.PESSIMISTIC, **kwargs):
         uow = unidad_de_trabajo()
         uow.registrar_batch(operacion, *args, lock=lock, **kwargs)
         guardar_unidad_trabajo(uow)
