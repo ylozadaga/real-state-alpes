@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from src.company_data_collector.seedwork.application.dto import DTO
+from company_data_collector.seedwork.application.dto import DTO
 
 
 @dataclass(frozen=True)

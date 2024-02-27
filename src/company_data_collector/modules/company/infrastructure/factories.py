@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from src.company_data_collector.seedwork.domain.factories import Factory
-from src.company_data_collector.seedwork.domain.repositories import Repository
-from src.company_data_collector.modules.company.domain.repositories import CompanyRepository
+from company_data_collector.seedwork.domain.factories import Factory
+from company_data_collector.seedwork.domain.repositories import Repository
+from company_data_collector.modules.company.domain.repositories import CompanyRepository
 from .repositories import CompanyRepositorySQLite
 from .exceptions import FactoryException
 

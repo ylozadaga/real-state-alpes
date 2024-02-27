@@ -1,30 +1,28 @@
-import src.company_data_collector.seedwork.presentation.api as api
+import company_data_collector.seedwork.presentation.api as api
 import json
-from src.company_data_collector.modules.company.application.services import CompanyService
-from src.company_data_collector.modules.company.application.dto import CompanyDTO
-from src.company_data_collector.seedwork.domain.exceptions import DomainException
 
-from flask import redirect, render_template, request, session, url_for
-from flask import Response
-from src.company_data_collector.modules.company.application.mappers import MapperCompanyDTOJson
-from src.company_data_collector.modules.company.application.commands.create_company import CreateCompany
-from src.company_data_collector.seedwork.application.commands import execute_command
+from flask import request, Response
 
-bp = api.create_blueprint('company', '/companies')
+from company_data_collector.modules.company.application.mappers import MapperCompanyDTOJson
+from company_data_collector.modules.company.application.commands.create_company import CreateCompany
+from company_data_collector.modules.company.infrastructure.dispatchers import Dispatcher
+
+from company_data_collector.seedwork.domain.exceptions import DomainException
 
 
-@bp.route('/commands/', methods=('POST',))
+bp = api.create_blueprint('company', '/company')
+
+dispatcher = Dispatcher()
+
+
+@bp.route('/async/commands', methods=('POST',))
 def create_company():
     try:
         company_dict = request.json
-
-        mapped_company = MapperCompanyDTOJson()
-        company_dto = mapped_company.outer_to_dto(company_dict)
-
-        comando = CreateCompany(company_dto.creation_date, company_dto.update_date, company_dto.id)
-
-        execute_command(comando)
-
+        company_mapper = MapperCompanyDTOJson()
+        company_dto = company_mapper.outer_to_dto(company_dict)
+        command = CreateCompany(company_dto)
+        dispatcher.publish_command(command, "commands-company")
         return Response('{}', status=202, mimetype='application/json')
     except DomainException as e:
         return Response(json.dumps(dict(error=str(e))), status=400, mimetype='application/json')

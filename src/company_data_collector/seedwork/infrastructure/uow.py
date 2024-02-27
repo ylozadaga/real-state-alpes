@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
-from ..domain.entities import AgregacionRaiz
+from ..domain.entities import RootAggregation
 from pydispatch import dispatcher
 
 import pickle
@@ -13,14 +13,14 @@ class Lock(Enum):
 
 
 class Batch:
-    def __init__(self, operacion, lock: Lock, *args, **kwargs):
-        self.operacion = operacion
+    def __init__(self, operation, lock: Lock, *args, **kwargs):
+        self.operation = operation
         self.args = args
         self.lock = lock
         self.kwargs = kwargs
 
 
-class UnidadTrabajo(ABC):
+class WorkUnit(ABC):
 
     def __enter__(self):
         return self
@@ -28,16 +28,16 @@ class UnidadTrabajo(ABC):
     def __exit__(self, *args):
         self.rollback()
 
-    def _obtener_eventos(self, batches=None):
+    def _get_events(self, batches=None):
         batches = self.batches if batches is None else batches
         for batch in batches:
             for arg in batch.args:
-                if isinstance(arg, AgregacionRaiz):
-                    return arg.eventos
+                if isinstance(arg, RootAggregation):
+                    return arg.events
         return list()
 
     @abstractmethod
-    def _limpiar_batches(self):
+    def _clear_batches(self):
         raise NotImplementedError
 
     @abstractmethod
@@ -45,45 +45,45 @@ class UnidadTrabajo(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def savepoints(self) -> list:
+    def save_points(self) -> list:
         raise NotImplementedError
 
     def commit(self):
-        self._publicar_eventos_post_commit()
-        self._limpiar_batches()
+        self._publish_events_post_commit()
+        self._clear_batches()
 
     @abstractmethod
     def rollback(self, savepoint=None):
-        self._limpiar_batches()
+        self._clear_batches()
 
     @abstractmethod
     def savepoint(self):
         raise NotImplementedError
 
-    def registrar_batch(self, operacion, *args, lock=Lock.PESSIMISTIC, **kwargs):
-        batch = Batch(operacion, lock, *args, **kwargs)
+    def register_batch(self, operation, *args, lock=Lock.PESSIMISTIC, **kwargs):
+        batch = Batch(operation, lock, *args, **kwargs)
         self.batches.append(batch)
-        self._publicar_eventos_dominio(batch)
+        self._publish_domain_events(batch)
 
-    def _publicar_eventos_dominio(self, batch):
-        for evento in self._obtener_eventos(batches=[batch]):
-            dispatcher.send(signal=f'{type(evento).__name__}Dominio', evento=evento)
+    def _publish_domain_events(self, batch):
+        for event in self._get_events(batches=[batch]):
+            dispatcher.send(signal=f'{type(event).__name__}Domain', event=event)
 
-    def _publicar_eventos_post_commit(self):
-        for evento in self._obtener_eventos():
-            dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)
+    def _publish_events_post_commit(self):
+        for event in self._get_events():
+            dispatcher.send(signal=f'{type(event).__name__}Integration', event=event)
 
 
 def is_flask():
     try:
         from flask import session
         return True
-    except Exception as e:
+    except Exception:
         return False
 
 
-def registrar_unidad_de_trabajo(serialized_obj):
-    from aeroalpes.config.uow import UnidadTrabajoSQLAlchemy
+def register_work_unit(serialized_obj):
+    from company_data_collector.config.uow import WorkUnitSQLAlchemy
     from flask import session
 
     session['uow'] = serialized_obj
@@ -91,56 +91,56 @@ def registrar_unidad_de_trabajo(serialized_obj):
 
 def flask_uow():
     from flask import session
-    from aeroalpes.config.uow import UnidadTrabajoSQLAlchemy
+    from company_data_collector.config.uow import WorkUnitSQLAlchemy
     if session.get('uow'):
         return session['uow']
     else:
-        uow_serialized = pickle.dumps(UnidadTrabajoSQLAlchemy())
-        registrar_unidad_de_trabajo(uow_serialized)
+        uow_serialized = pickle.dumps(WorkUnitSQLAlchemy())
+        register_work_unit(uow_serialized)
         return uow_serialized
 
 
-def unidad_de_trabajo() -> UnidadTrabajo:
+def work_unit() -> WorkUnit:
     if is_flask():
         return pickle.loads(flask_uow())
     else:
-        raise Exception('No hay unidad de trabajo')
+        raise Exception('There is no Work Unit')
 
 
-def guardar_unidad_trabajo(uow: UnidadTrabajo):
+def save_work_unit(uow: WorkUnit):
     if is_flask():
-        registrar_unidad_de_trabajo(pickle.dumps(uow))
+        register_work_unit(pickle.dumps(uow))
     else:
-        raise Exception('No hay unidad de trabajo')
+        raise Exception('There is no Work Unit')
 
 
 class UnitWorkPort:
 
     @staticmethod
     def commit():
-        uow = unidad_de_trabajo()
+        uow = work_unit()
         uow.commit()
-        guardar_unidad_trabajo(uow)
+        save_work_unit(uow)
 
     @staticmethod
     def rollback(savepoint=None):
-        uow = unidad_de_trabajo()
+        uow = work_unit()
         uow.rollback(savepoint=savepoint)
-        guardar_unidad_trabajo(uow)
+        save_work_unit(uow)
 
     @staticmethod
     def savepoint():
-        uow = unidad_de_trabajo()
+        uow = work_unit()
         uow.savepoint()
-        guardar_unidad_trabajo(uow)
+        save_work_unit(uow)
 
     @staticmethod
-    def dar_savepoints():
-        uow = unidad_de_trabajo()
-        return uow.savepoints()
+    def get_save_points():
+        uow = work_unit()
+        return uow.save_points()
 
     @staticmethod
-    def register_batch(operacion, *args, lock=Lock.PESSIMISTIC, **kwargs):
-        uow = unidad_de_trabajo()
-        uow.registrar_batch(operacion, *args, lock=lock, **kwargs)
-        guardar_unidad_trabajo(uow)
+    def register_batch(operation, *args, lock=Lock.PESSIMISTIC, **kwargs):
+        uow = work_unit()
+        uow.register_batch(operation, *args, lock=lock, **kwargs)
+        save_work_unit(uow)

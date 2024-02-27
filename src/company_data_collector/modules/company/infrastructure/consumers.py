@@ -5,9 +5,9 @@ import time
 import logging
 import traceback
 
-from src.company_data_collector.modules.company.intrastructure.schema.v1.events import EventCompanyCreated
-from src.company_data_collector.modules.company.intrastructure.schema.v1.commands import CommandCreateCompany
-from src.company_data_collector.seedwork.infrastructure import utils
+from company_data_collector.modules.company.infrastructure.schema.v1.events import EventCompanyCreated
+from company_data_collector.modules.company.infrastructure.schema.v1.commands import CommandCreateCompany
+from company_data_collector.seedwork.infrastructure import utils
 
 
 def subscribe_to_events():
