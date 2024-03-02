@@ -7,20 +7,18 @@ En este archivo usted encontrará las entidades del dominio de cliente
 from datetime import datetime
 from company_data_auditor.seedwork.dominio.entidades import Entidad, AgregacionRaiz
 from dataclasses import dataclass, field
-
-from .objetos_valor import Nombre, Email, Cedula, Rut
-
-@dataclass
-class Usuario(Entidad):
-    nombre: Nombre = field(default_factory=Nombre)
-    email: Email = field(default_factory=Email)
+#from .objetos_valor import Fechas
 
 @dataclass
-class ClienteNatural(Usuario, AgregacionRaiz):
-    cedula: Cedula = None
-    fecha_nacimiento: datetime = None
+class Company(Entidad):
+    id: str = None
+    registration_date: datetime = None
+    renovation_date: datetime = None
+    nit: str = None
+    acronym: str = None
+    status: str = None
+    validity: str = None
+    organization_type: str = None
+    registration_category: str = None
+    audit_date: datetime = None
 
-@dataclass
-class ClienteEmpresa(Usuario, AgregacionRaiz):
-    rut: Rut = None
-    fecha_constitucion: datetime = None

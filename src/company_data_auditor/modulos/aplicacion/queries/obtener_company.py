@@ -1,10 +1,10 @@
 from company_data_auditor.seedwork.aplicacion.queries import Query, QueryHandler, ResultadoQuery
 import uuid
 
-class ObtenerUsuario(Query):
+class ObtenerCompany(Query):
     listing_id: uuid.UUID
 
-class ObtenerUsuarioHandler(QueryHandler):
+class ObtenerCompanyHandler(QueryHandler):
 
     def handle() -> ResultadoQuery:
         ...

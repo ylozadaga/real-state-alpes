@@ -1,10 +1,10 @@
 from company_data_auditor.seedwork.aplicacion.queries import Query, QueryHandler, ResultadoQuery
 import uuid
 
-class ObtenerUsuariosDesactivados(Query):
+class ObtenerCompaniesAuditadas(Query):
     status: str
 
-class ObtenerUsuariosDesactivadosHandler(QueryHandler):
+class ObtenerCompaniesAuditadasHandler(QueryHandler):
 
     def handle() -> ResultadoQuery:
         ...

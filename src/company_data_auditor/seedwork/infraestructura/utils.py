@@ -2,6 +2,7 @@ import time
 import os
 import datetime
 import requests
+import json
 from fastavro.schema import parse_schema
 from pulsar.schema import *
 
