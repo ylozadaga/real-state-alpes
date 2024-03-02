@@ -1,19 +1,28 @@
 version: '3'
 networks:
-  pulsar:
+  pulsar-net:
     driver: bridge
-  app:
+  app-net:
+    driver: bridge
+  company-data-auditor-net:
+    driver: bridge
+  company-data-collector-net:
+    driver: bridge
+  company-data-presenter-net:
+    driver: bridge
+  company-data-processor-net:
     driver: bridge
 
 services:
 # Start zookeeper
+
   zookeeper:
     image: apachepulsar/pulsar:latest
     profiles: [ "pulsar" ]
     container_name: zookeeper
     restart: on-failure
     networks:
-      - pulsar
+      - pulsar-net
     volumes:
       - ./data/zookeeper:/pulsar/data/zookeeper
     environment:
@@ -28,14 +37,16 @@ services:
       timeout: 5s
       retries: 30
 
+
 # Init cluster metadata
+
   pulsar-init:
     container_name: pulsar-init
     hostname: pulsar-init
     image: apachepulsar/pulsar:latest
     profiles: [ "pulsar" ]
     networks:
-      - pulsar
+      - pulsar-net
     command: >
       bin/pulsar initialize-cluster-metadata \
                --cluster cluster-a \
@@ -47,14 +58,16 @@ services:
       zookeeper:
         condition: service_healthy
 
+
 # Start bookie
+
   bookie:
     image: apachepulsar/pulsar:latest
     profiles: [ "pulsar" ]
     container_name: bookie
     restart: on-failure
     networks:
-      - pulsar
+      - pulsar-net
     environment:
       - clusterName=cluster-a
       - zkServers=zookeeper:2181
@@ -70,7 +83,9 @@ services:
     command: bash -c "bin/apply-config-from-env.py conf/bookkeeper.conf
       && exec bin/pulsar bookie"
 
+
 # Start broker
+
   broker:
     image: apachepulsar/pulsar:latest
     profiles: [ "pulsar" ]
@@ -78,7 +93,7 @@ services:
     hostname: broker
     restart: on-failure
     networks:
-      - pulsar
+      - pulsar-net
     environment:
       - metadataStoreUrl=zk:zookeeper:2181
       - zookeeperServers=zookeeper:2181
@@ -99,62 +114,195 @@ services:
     command: bash -c "bin/apply-config-from-env.py conf/broker.conf
       &&  exec bin/pulsar broker"
 
-# real state alpes services
-  rs-alpes_db:
+
+# Real State Alpes Services
+
+  company-data-auditor_db:
     image: postgres:latest
-    container_name: rs-alpes_db
-    profiles: [ "rs-alpes" ]
-    hostname: rs-alpes_db
+    container_name: company-data-auditor_db
+    hostname: company-data-auditor_db
+    profiles: [ "rs-alpes", "company-data-auditor" ]
     restart: on-failure
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: rs-alpes
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 2s
       timeout: 5s
       retries: 5
+    environment:
+      POSTGRES_DB: company-data-auditor
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+        - "5432:5432"
     networks:
-      - app
+      - company-data-auditor-net
 
-  rs-alpes:
-    container_name: rs-alpes
-    hostname: rs-alpes
+  company-data-auditor:
+    container_name: company-data-auditor
+    hostname: company-data-auditor
+    profiles: [ "rs-alpes", "company-data-auditor" ]
     build:
       context: .
-      dockerfile: rs-alpes.Dockerfile
-    profiles: [ "rs-alpes" ]
-    networks:
-      - pulsar
-      - app
+      dockerfile: company_data_auditor.Dockerfile
     depends_on:
-      rs-alpes_db:
+      company-data-auditor_db:
         condition: service_healthy
     environment:
-      - RS_ALPES_ADDRESS=rs-alpes
-      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/rs-alpes
+      - RS_ALPES_ADDRESS=company-data-auditor
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-auditor
       - PULSAR_ADDRESS=broker
       - BROKER_HOST=broker
     ports:
       - "5000:5000"
+    networks:
+      - app-net
+      - company-data-auditor-net
+      - pulsar-net
+
+  company-data-collector_db:
+    image: postgres:latest
+    container_name: company-data-collector_db
+    hostname: company-data-collector_db
+    profiles: [ "rs-alpes", "company-data-collector" ]
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_DB: company-data-collector
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - company-data-collector-net
+
+  company-data-collector:
+    container_name: company-data-collector
+    hostname: company-data-collector
+    profiles: [ "rs-alpes", "company-data-collector" ]
+    build:
+      context: .
+      dockerfile: company_data_collector.Dockerfile
+    depends_on:
+      company-data-collector_db:
+        condition: service_healthy
+    environment:
+      - RS_ALPES_ADDRESS=company-data-collector
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-collector
+      - PULSAR_ADDRESS=broker
+      - BROKER_HOST=broker
+    ports:
+      - "5000:5001"
+    networks:
+      - app-net
+      - company-data-collector-net
+      - pulsar-net
+
+  company-data-presenter_db:
+    image: postgres:latest
+    container_name: company-data-presenter_db
+    hostname: company-data-presenter_db
+    profiles: [ "rs-alpes", "company-data-presenter" ]
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_DB: company-data-presenter
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - company-data-presenter-net
+
+  company-data-presenter:
+    container_name: company-data-presenter
+    hostname: company-data-presenter
+    profiles: [ "rs-alpes", "company-data-presenter" ]
+    build:
+      context: .
+      dockerfile: company_data_presenter.Dockerfile
+    depends_on:
+      company-data-presenter_db:
+        condition: service_healthy
+    environment:
+      - RS_ALPES_ADDRESS=company-data-presenter
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-presenter
+      - PULSAR_ADDRESS=broker
+      - BROKER_HOST=broker
+    ports:
+      - "5000:5002"
+    networks:
+      - app-net
+      - company-data-presenter-net
+      - pulsar-net
+
+  company-data-processor_db:
+    image: postgres:latest
+    container_name: company-data-processor_db
+    hostname: company-data-processor_db
+    profiles: [ "rs-alpes", "company_data_processor" ]
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_DB: company-data-processor
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - company-data-processor-net
+
+  company-data-processor:
+    container_name: company-data-processor
+    hostname: company-data-processor
+    profiles: [ "rs-alpes", "company_data_processor" ]
+    build:
+      context: .
+      dockerfile: company_data_processor.Dockerfile
+    depends_on:
+      company-data-processor_db:
+        condition: service_healthy
+    environment:
+      - RS_ALPES_ADDRESS=company-data-processor
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-processor
+      - PULSAR_ADDRESS=broker
+      - BROKER_HOST=broker
+    ports:
+      - "5000:5003"
+    networks:
+      - app-net
+      - company-data-processor-net
+      - pulsar-net
+
 
 # Notification Services
+
   notificator:
     container_name: notificator
     hostname: notificator
+    profiles: [ "notificator" ]
     build:
       context: .
       dockerfile: notificator.Dockerfile
-    profiles: [ "notificator" ]
-    networks:
-      - pulsar
     depends_on:
-      - rs-alpes
       - broker
+      - company_data_auditor
+      - company_data_collector
+      - company_data_presenter
+      - company_data_processor
     environment:
-      - RS_ALPES_ADDRESS=rs-alpes
+      - RS_ALPES_ADDRESS=company-data-collector
       - PULSAR_ADDRESS=broker
-
+    networks:
+      - pulsar-net

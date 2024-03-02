@@ -1,13 +1,13 @@
-import src.company_data_collector.seedwork.presentation.api as api
+import company_data_collector.seedwork.presentation.api as api
 import json
 
 from flask import request, Response
 
-from src.company_data_collector.modules.company.application.mappers import MapperCompanyDTOJson
-from src.company_data_collector.modules.company.application.commands.create_company import CreateCompany
-from src.company_data_collector.modules.company.infrastructure.dispatchers import Dispatcher
+from company_data_collector.modules.company.application.mappers import MapperCompanyDTOJson
+from company_data_collector.modules.company.application.commands.create_company import CreateCompany
+from company_data_collector.modules.company.infrastructure.dispatchers import Dispatcher
 
-from src.company_data_collector.seedwork.domain.exceptions import DomainException
+from company_data_collector.seedwork.domain.exceptions import DomainException
 
 
 bp = api.create_blueprint('company', '/company')

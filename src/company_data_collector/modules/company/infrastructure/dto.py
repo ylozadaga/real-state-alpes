@@ -1,4 +1,4 @@
-from src.company_data_collector.config.db import db
+from company_data_collector.config.db import db
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import Column, ForeignKey, Integer, Table
 

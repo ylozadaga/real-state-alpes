@@ -1,7 +1,7 @@
-from src.company_data_collector.config.db import db
-from src.company_data_collector.modules.company.domain.repositories import CompanyRepository
-from src.company_data_collector.modules.company.domain.entities import Company
-from src.company_data_collector.modules.company.domain.factories import CompanyFactory
+from company_data_collector.config.db import db
+from company_data_collector.modules.company.domain.repositories import CompanyRepository
+from company_data_collector.modules.company.domain.entities import Company
+from company_data_collector.modules.company.domain.factories import CompanyFactory
 from .dto import Company as CompanyDTO
 from .mappers import CompanyMapper
 from uuid import UUID

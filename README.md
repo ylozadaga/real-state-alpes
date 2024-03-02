@@ -1,96 +1,35 @@
 # real-state-alpes
 
-### Ejecutar Aplicación
+### Run Company Data Auditor
+To run the auditor, check the auditor's **[README.md](./src/company_data_auditor/README.md)** file.
 
-Desde el directorio principal ejecute el siguiente comando.
+### Run Company Data Collector
+To run the collector, check the auditor's **[README.md](./src/company_data_collector/README.md)** file.
 
-```bash
-flask --app src/company_data_collector/api run
-```
+### Run Company Data Presenter
+To run the presenter, check the auditor's **[README.md](./src/company_data_presenter/README.md)** file.
 
-Siempre puede ejecutarlo en modo DEBUG:
-
-```bash
-flask --app src/company_data_collector/api --debug run
-```
+### Run Company Data Processor
+To run the processor, check the auditor's **[README.md](./src/company_data_processor/README.md)** file.
 
 
-### Crear imagen Docker
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker build . -f rs-alpes.Dockerfile -t rs-alpes/flask
-```
-
-### Ejecutar contenedora (sin compose)
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker run -p 5000:5000 rs-alpes/flask
-```
-
-## Microservicio Notificaciones
-### Ejecutar Aplicación
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-python src/notificator/main.py
-```
-
-### Crear imagen Docker
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker build . -f notificator.Dockerfile -t rs-alpes/notificator
-```
-
-### Ejecutar contenedora (sin compose)
-
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-docker run rs-alpe/notificator
-```
-
-## Docker-compose
-
+### Run Complete Architecture with docker-compose
 Para desplegar toda la arquitectura en un solo comando, usamos `docker-compose`. Para ello, desde el directorio principal, ejecute el siguiente comando:
 
 ```bash
 docker-compose up
 ```
 
-Si desea detener el ambiente ejecute:
+### Stop Complete Architecture with docker-compose
+To stop the complete architecture, execute the following command from the root directory:
 
 ```bash
 docker-compose stop
 ```
 
-
-## Desplegar Solo Apache Pulsar
-
-Para desplegar solo los servicios de Apache Pulsar, usamos:
+### Deploy Only Apache Pulsar
+To deploy only Apache Pulsar, execute the following command from the root directory:
 
 ```bash
 docker-compose --profile pulsar up
-```
-
-## Desplegar Solo el Microservicio de recolección de datos
-
-Para desplegar solo el microservicio de recoleccion de datos, usamos:
-
-```bash
-docker-compose --profile rs-alpes up
-```
-
-## Desplegar Solo el Microservicio de notificaciones
-
-Para desplegar solo el microservicio de notificaciones, usamos:
-
-```bash
-docker-compose --profile notificator up
 ```

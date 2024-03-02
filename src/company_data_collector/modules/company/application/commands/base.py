@@ -1,6 +1,6 @@
-from src.company_data_collector.seedwork.application.commands import CommandHandler
-from src.company_data_collector.modules.company.infrastructure.factories import RepositoryFactory
-from src.company_data_collector.modules.company.domain.factories import CompanyFactory
+from company_data_collector.seedwork.application.commands import CommandHandler
+from company_data_collector.modules.company.infrastructure.factories import RepositoryFactory
+from company_data_collector.modules.company.domain.factories import CompanyFactory
 
 
 class CreateCompanyBaseHandler(CommandHandler):

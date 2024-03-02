@@ -133,3 +133,4 @@ dmypy.json
 
 # Data Volume for Zookeeper
 /data
+.idea/

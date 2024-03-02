@@ -1,4 +1,4 @@
-from src.company_data_collector.seedwork.domain.exceptions import FactoryException
+from company_data_collector.seedwork.domain.exceptions import FactoryException
 
 
 class FactoryTypeNotImplementedException(FactoryException):

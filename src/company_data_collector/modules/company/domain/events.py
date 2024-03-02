@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from src.company_data_collector.seedwork.domain.events import (DomainEvent)
+from company_data_collector.seedwork.domain.events import (DomainEvent)
 from datetime import datetime
 
 

@@ -83,7 +83,7 @@ def is_flask():
 
 
 def register_work_unit(serialized_obj):
-    from src.company_data_collector.config.uow import WorkUnitSQLAlchemy
+    from company_data_collector.config.uow import WorkUnitSQLAlchemy
     from flask import session
 
     session['uow'] = serialized_obj
@@ -91,7 +91,7 @@ def register_work_unit(serialized_obj):
 
 def flask_uow():
     from flask import session
-    from src.company_data_collector.config.uow import WorkUnitSQLAlchemy
+    from company_data_collector.config.uow import WorkUnitSQLAlchemy
     if session.get('uow'):
         return session['uow']
     else:

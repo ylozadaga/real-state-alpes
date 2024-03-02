@@ -1,13 +1,13 @@
-from src.company_data_collector.seedwork.application.commands import Command
-from src.company_data_collector.modules.company.application.dto import CompanyDTO
+from company_data_collector.seedwork.application.commands import Command
+from company_data_collector.modules.company.application.dto import CompanyDTO
 from .base import CreateCompanyBaseHandler
 from dataclasses import dataclass, field
-from src.company_data_collector.seedwork.application.commands import execute_command as command
+from company_data_collector.seedwork.application.commands import execute_command as command
 
-from src.company_data_collector.modules.company.domain.entities import Company
-from src.company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
-from src.company_data_collector.modules.company.application.mappers import CompanyMapper
-from src.company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
+from company_data_collector.modules.company.domain.entities import Company
+from company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
+from company_data_collector.modules.company.application.mappers import CompanyMapper
+from company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
 
 
 @dataclass

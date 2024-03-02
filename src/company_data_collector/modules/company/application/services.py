@@ -1,9 +1,9 @@
-from src.company_data_collector.seedwork.application.services import Service
-from src.company_data_collector.modules.company.domain.entities import Company
-from src.company_data_collector.modules.company.domain.factories import CompanyFactory
-from src.company_data_collector.modules.company.infrastructure.factories import RepositoryFactory
-from src.company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
-from src.company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
+from company_data_collector.seedwork.application.services import Service
+from company_data_collector.modules.company.domain.entities import Company
+from company_data_collector.modules.company.domain.factories import CompanyFactory
+from company_data_collector.modules.company.infrastructure.factories import RepositoryFactory
+from company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
+from company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
 from .mappers import CompanyMapper
 from .dto import CompanyDTO
 
