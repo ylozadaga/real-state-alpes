@@ -6,7 +6,6 @@ from dataclasses import dataclass
 class Query(ABC):
     ...
 
-
 @dataclass
 class QueryResult:
     result: None

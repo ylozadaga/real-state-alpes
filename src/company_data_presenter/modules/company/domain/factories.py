@@ -10,7 +10,7 @@ from dataclasses import dataclass
 @dataclass
 class CompanyFactory(Factory):
 
-    def create_objet(self, obj: any, mapper: Mapper) -> any:
+    def create_object(self, obj: any, mapper: Mapper) -> any:
         if isinstance(obj, Entity):
             return mapper.entity_to_dto(obj)
         else:

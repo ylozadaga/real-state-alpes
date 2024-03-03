@@ -22,4 +22,4 @@ class CompanyRepositorySQLite(CompanyRepository):
 
     def get_all(self) -> list[Company]:
         companies = db.session.query(CompanyDTO).all()     
-        return [company for company in companies self.company_factory.create_object(company, CompanyMapper())] 
+        return [company for company in companies (self.company_factory.create_object(company, CompanyMapper()))] 

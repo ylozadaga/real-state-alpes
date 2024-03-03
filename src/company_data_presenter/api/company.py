@@ -16,17 +16,12 @@ bp = api.create_blueprint('company', '/company')
 
 dispatcher = Dispatcher()
 
-
-@bp.route('/company/private/<id>', methods=('GET',))
-def find_company(id):
-        sr = CompanyService()
-
-    return sr.find_company_by_id(id)
-
-
 @bp.route('/company/private', methods=('GET',))
-def find_all_companies():
+@bp.route('/company/private/<id>', methods=('GET',))
+def find_company(id=None):
     sr = CompanyService()
-
-    return sr.find_all_companies()
-
+    map_company = MapperCompanyDTOJson()
+    if id:
+        return map_company.dto_to_outer(sr.find_company_by_id(id))
+    else:
+        return [map_company.dto_to_outer(company) for company in sr.find_all_companies()]
