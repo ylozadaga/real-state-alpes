@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import datetime
 from dataclasses import dataclass, field
 
-from src.company_data_presenter.seedwork.domain.entities import RootAggregation
-from src.company_data_presenter.modules.company.domain.events import CompanyCreated
+from company_data_presenter.seedwork.domain.entities import RootAggregation
+from company_data_presenter.modules.company.domain.events import CompanyCreated
 
 
 @dataclass

@@ -7,16 +7,16 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 #AJUSTAR
 def record_handlers():
-    import src.company_data_presenter.modules.company.application
+    import company_data_presenter.modules.company.application
 
 
 def import_alchemy_models():
-    import src.company_data_presenter.modules.company.infrastructure.dto
+    import company_data_presenter.modules.company.infrastructure.dto
 
 
 def start_consumer():
     import threading
-    import src.company_data_presenter.modules.company.infrastructure.consumers as company
+    import company_data_presenter.modules.company.infrastructure.consumers as company
 
     threading.Thread(target=company.subscribe_to_events()).start()
 

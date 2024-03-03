@@ -1,9 +1,9 @@
 from .entities import Company
 from .rules import IsValidDataFormat
 from .exceptions import ObjectTypeNotExistInDomainCompanyException
-from src.company_data_presenter.seedwork.domain.repositories import Mapper, Repository
-from src.company_data_presenter.seedwork.domain.factories import Factory
-from src.company_data_presenter.seedwork.domain.entities import Entity
+from company_data_presenter.seedwork.domain.repositories import Mapper, Repository
+from company_data_presenter.seedwork.domain.factories import Factory
+from company_data_presenter.seedwork.domain.entities import Entity
 from dataclasses import dataclass
 
 

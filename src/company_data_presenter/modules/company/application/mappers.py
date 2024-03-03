@@ -1,6 +1,6 @@
-from src.company_data_presenter.seedwork.application.dto import Mapper as AppMap
-from src.company_data_presenter.seedwork.domain.repositories import Mapper as RepMap
-from src.company_data_presenter.modules.company.domain.entities import Company
+from company_data_presenter.seedwork.application.dto import Mapper as AppMap
+from company_data_presenter.seedwork.domain.repositories import Mapper as RepMap
+from company_data_presenter.modules.company.domain.entities import Company
 from .dto import CompanyDTO
 
 

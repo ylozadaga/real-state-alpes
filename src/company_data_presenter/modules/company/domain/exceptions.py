@@ -1,4 +1,4 @@
-from src.company_data_presenter.seedwork.domain.exceptions import FactoryException
+from company_data_presenter.seedwork.domain.exceptions import FactoryException
 
 
 class ObjectTypeNotExistInDomainCompanyException(FactoryException):

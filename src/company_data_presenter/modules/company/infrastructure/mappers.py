@@ -1,5 +1,5 @@
-from src.company_data_presenter.seedwork.domain.repositories import Mapper
-from src.company_data_presenter.modules.company.domain.entities import Company
+from company_data_presenter.seedwork.domain.repositories import Mapper
+from company_data_presenter.modules.company.domain.entities import Company
 from .dto import Company as CompanyDTO
 
 
