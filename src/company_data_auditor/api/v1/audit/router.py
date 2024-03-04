@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status, BackgroundTasks
-from company_data_auditor.modulos.aplicacion.comandos.auditar_company import ComandoAuditarCompania
+from company_data_auditor.modulos.aplicacion.comandos.auditar_company import ComandoAuditarCompany
 from company_data_auditor.seedwork.presentacion.dto import RespuestaAsincrona
 from company_data_auditor.seedwork.aplicacion.comandos import ejecutar_commando
-from company_data_auditor.seedwork.aplicacion.queries import ejecutar_query
+#from company_data_auditor.seedwork.aplicacion.queries import ejecutar_query
 
 from .dto import AuditCompany
 
@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.post("/auditar", status_code=status.HTTP_202_ACCEPTED, response_model=RespuestaAsincrona)
 async def audit_company(company: AuditCompany, background_tasks: BackgroundTasks) -> dict[str, str]:
-    comando = ComandoAuditarCompania(
+    comando = ComandoAuditarCompany(
         id=company.id,
         registration_date=company.registration_date,
         renovation_date=company.renovation_date,

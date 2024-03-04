@@ -59,4 +59,4 @@ async def prueba_company_auditada() -> dict[str, str]:
 async def health() -> dict[str, str]:
     return {"status": "ok"}
 
-app.include_router(v1, prefix="/v1", tags=["Version 1"])
+#app.include_router(v1, prefix="/v1", tags=["Version 1"])

@@ -15,4 +15,4 @@ COPY . .
 WORKDIR "/src"
 
 #CMD [ "flask", "--app", "./src/company_data_auditor/api", "run", "--host=0.0.0.0"]
-CMD [ "uvicorn", "company_data_auditor.main:app", "--host", "localhost", "--port", "8000", "--reload"]
+CMD [ "uvicorn", "company_data_auditor.main:app", "--host=0.0.0.0"]
