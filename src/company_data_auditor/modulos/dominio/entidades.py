@@ -5,8 +5,8 @@ En este archivo usted encontrará las entidades del dominio de cliente
 """
 
 from datetime import datetime
-from company_data_auditor.seedwork.dominio.entidades import Entidad, AgregacionRaiz
-from dataclasses import dataclass, field
+from company_data_auditor.seedwork.dominio.entidades import Entidad #, AgregacionRaiz
+from dataclasses import dataclass #, field
 #from .objetos_valor import Fechas
 
 @dataclass

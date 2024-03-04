@@ -1,11 +1,10 @@
 from fastapi import FastAPI
-from company_data_auditor.config.api import app_configs, settings
+from company_data_auditor.config.api import app_configs #, settings
 from company_data_auditor.api.v1.router import router as v1
 
 from company_data_auditor.modulos.infraestructura.consumidores import suscribirse_a_topico
-from company_data_auditor.modulos.infraestructura.v1.eventos import EventoUsuario, UsuarioValidado, UsuarioDesactivado, UsuarioRegistrado, TipoCliente
-from company_data_auditor.modulos.infraestructura.v1.comandos import ComandoRegistrarUsuario, ComandoValidarUsuario, ComandoDesactivarUsuario, RegistrarUsuario, ValidarUsuario, DesactivarUsuario
-from company_data_auditor.modulos.infraestructura.v1 import TipoCliente
+from company_data_auditor.modulos.infraestructura.v1.eventos import EventoCompanyAuditada, CompanyAuditada
+from company_data_auditor.modulos.infraestructura.v1.comandos import ComandoAuditarCompany
 from company_data_auditor.modulos.infraestructura.despachadores import Despachador
 from company_data_auditor.seedwork.infraestructura import utils
 
@@ -14,21 +13,17 @@ import time
 import traceback
 import uvicorn
 
-
 app = FastAPI(**app_configs)
 tasks = list()
 
 @app.on_event("startup")
 async def app_startup():
     global tasks
-    task1 = asyncio.ensure_future(suscribirse_a_topico("evento-usuarios", "sub-cliente", EventoUsuario))
-    task2 = asyncio.ensure_future(suscribirse_a_topico("comando-registrar-usuario", "sub-com-registrar-usuario", ComandoRegistrarUsuario))
-    task3 = asyncio.ensure_future(suscribirse_a_topico("comando-validar-usuario", "sub-com-validar-usuario", ComandoValidarUsuario))
-    task4 = asyncio.ensure_future(suscribirse_a_topico("comando-desactivar-usuario", "sub-com-desactivar-usuario", ComandoDesactivarUsuario))
+    task1 = asyncio.ensure_future(suscribirse_a_topico("evento-auditar-company", "sub-company-audited", EventoCompanyAuditada))
+    task2 = asyncio.ensure_future(suscribirse_a_topico("comando-auditar-company", "sub-com-auditar-company", ComandoAuditarCompany))
+    # task3 = asyncio.ensure_future(suscribirse_a_topico("comando-disable-company", "sub-com-disable-company", ComandoDesactivarCompany))
     tasks.append(task1)
     tasks.append(task2)
-    tasks.append(task3)
-    tasks.append(task4)
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -36,109 +31,32 @@ def shutdown_event():
     for task in tasks:
         task.cancel()
 
-@app.get("/prueba-usuario-validado", include_in_schema=False)
-async def prueba_usuario_validado() -> dict[str, str]:
-    payload = UsuarioValidado(id = "1232321321", fecha_validacion = utils.time_millis())
-    evento = EventoUsuario(
+@app.get("/prueba-auditar-company", include_in_schema=False)
+async def prueba_auditar_company() -> dict[str, str]:
+    comando = ComandoAuditarCompany(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=UsuarioValidado.__name__,
-        usuario_validado = payload
+        datacontenttype=CompanyAuditada.__name__,
+        data = CompanyAuditada(id = "1232321321", fecha_audit = utils.time_millis())
     )
     despachador = Despachador()
-    despachador.publicar_mensaje(evento, "evento-usuarios")
+    despachador.publicar_mensaje(comando, "comando-auditar-company")
     return {"status": "ok"}
 
-@app.get("/prueba-usuario-registrado", include_in_schema=False)
-async def prueba_usuario_registrado() -> dict[str, str]:
-    payload = UsuarioRegistrado(
-        id = "1232321321", 
-        nombres = "Juan",
-        apellidos = "Urrego",
-        email = "js.urrego110@aeroalpes.net",
-        tipo_cliente = TipoCliente.natural,
-        fecha_creacion = utils.time_millis())
-
-    evento = EventoUsuario(
+@app.get("/prueba-company-auditada", include_in_schema=False)
+async def prueba_company_auditada() -> dict[str, str]:
+    evento = EventoCompanyAuditada(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=UsuarioRegistrado.__name__,
-        usuario_registrado = payload
+        datacontenttype=CompanyAuditada.__name__,
+        company_audited = CompanyAuditada(id = "1232321321", fecha_audit = utils.time_millis())
     )
     despachador = Despachador()
-    despachador.publicar_mensaje(evento, "evento-usuarios")
-    return {"status": "ok"}
-
-@app.get("/prueba-usuario-desactivado", include_in_schema=False)
-async def prueba_usuario_desactivado() -> dict[str, str]:
-    payload = UsuarioDesactivado(id = "1232321321", fecha_validacion = utils.time_millis())
-    evento = EventoUsuario(
-        time=utils.time_millis(),
-        ingestion=utils.time_millis(),
-        datacontenttype=UsuarioDesactivado.__name__,
-        usuario_desactivado = payload
-    )
-    despachador = Despachador()
-    despachador.publicar_mensaje(evento, "evento-usuarios")
-    return {"status": "ok"}
-
-@app.get("/prueba-registrar-usuario", include_in_schema=False)
-async def prueba_registrar_usuario() -> dict[str, str]:
-    payload = RegistrarUsuario(
-        nombres = "Juan",
-        apellidos = "Urrego",
-        email = "js.urrego110@aeroalpes.net",
-        tipo_cliente = TipoCliente.natural,
-        fecha_creacion = utils.time_millis()
-    )
-
-    comando = ComandoRegistrarUsuario(
-        time=utils.time_millis(),
-        ingestion=utils.time_millis(),
-        datacontenttype=RegistrarUsuario.__name__,
-        data = payload
-    )
-    despachador = Despachador()
-    despachador.publicar_mensaje(comando, "comando-registrar-usuario")
-    return {"status": "ok"}
-
-@app.get("/prueba-validar-usuario", include_in_schema=False)
-async def prueba_validar_usuario() -> dict[str, str]:
-    payload = ValidarUsuario(
-        id = "1232321321", 
-        fecha_validacion = utils.time_millis()
-    )
-
-    comando = ComandoValidarUsuario(
-        time=utils.time_millis(),
-        ingestion=utils.time_millis(),
-        datacontenttype=ValidarUsuario.__name__,
-        data = payload
-    )
-    despachador = Despachador()
-    despachador.publicar_mensaje(comando, "comando-validar-usuario")
-    return {"status": "ok"}
-
-@app.get("/prueba-desactivar-usuario", include_in_schema=False)
-async def prueba_desactivar_usuario() -> dict[str, str]:
-    payload = DesactivarUsuario(
-        id = "1232321321", 
-        fecha_validacion = utils.time_millis()
-    )
-
-    comando = ComandoDesactivarUsuario(
-        time=utils.time_millis(),
-        ingestion=utils.time_millis(),
-        datacontenttype=DesactivarUsuario.__name__,
-        data = payload
-    )
-    despachador = Despachador()
-    despachador.publicar_mensaje(comando, "comando-desactivar-usuario")
+    despachador.publicar_mensaje(evento, "evento-auditar-company")
     return {"status": "ok"}
 
 @app.get("/health", include_in_schema=False)
 async def health() -> dict[str, str]:
     return {"status": "ok"}
-
 
 app.include_router(v1, prefix="/v1", tags=["Version 1"])
