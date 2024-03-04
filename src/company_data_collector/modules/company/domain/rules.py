@@ -1,4 +1,4 @@
-from company_data_collector.seedwork.domain.rules import BusinessRule
+from ....seedwork.domain.rules import BusinessRule
 
 
 class IsValidDataFormat(BusinessRule):

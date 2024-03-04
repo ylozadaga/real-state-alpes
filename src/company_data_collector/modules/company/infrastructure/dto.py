@@ -1,17 +1,11 @@
-from company_data_collector.config.db import db
-from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import Column, ForeignKey, Integer, Table
-
-import uuid
+from ....config.db import db
 
 Base = db.declarative_base()
 
 
 class Company(db.Model):
-    __tablename__ = "companies"
+    __tablename__ = "company"
     id = db.Column(db.String, primary_key=True)
-    registration_date = db.Column(db.DateTime, nullable=False)
-    renovation_date = db.Column(db.DateTime, nullable=False)
     nit = db.Column(db.String, primary_key=True)
     acronym = db.Column(db.String, primary_key=True)
     status = db.Column(db.String, primary_key=True)

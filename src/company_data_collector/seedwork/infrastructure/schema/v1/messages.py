@@ -1,7 +1,7 @@
 import uuid
 
 from pulsar.schema import *
-from company_data_collector.seedwork.infrastructure.utils import time_millis
+from ...utils import time_millis
 
 
 class Message(Record):

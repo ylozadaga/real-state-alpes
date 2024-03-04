@@ -1,20 +1,19 @@
-from company_data_collector.seedwork.application.commands import Command
-from company_data_collector.modules.company.application.dto import CompanyDTO
+from .....seedwork.application.commands import Command
+from ...application.dto import CompanyDTO
 from .base import CreateCompanyBaseHandler
-from dataclasses import dataclass, field
-from company_data_collector.seedwork.application.commands import execute_command as command
+from dataclasses import dataclass
+from ...infrastructure.schema.v1.commands import CreateCompanyPayloadCommand
+from .....seedwork.application.commands import execute_command as command
 
-from company_data_collector.modules.company.domain.entities import Company
-from company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
-from company_data_collector.modules.company.application.mappers import CompanyMapper
-from company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
+from .....modules.company.domain.entities import Company
+from .....seedwork.infrastructure.uow import UnitWorkPort
+from ....company.application.mappers import CompanyMapper
+from ....company.infrastructure.repositories import CompanyRepository
 
 
 @dataclass
 class CreateCompany(Command):
-    id: str
-    registration_date: str
-    renovation_date: str
+    company_id: str
     nit: str
     acronym: str
     status: str
@@ -22,25 +21,21 @@ class CreateCompany(Command):
     organization_type: str
     registration_category: str
 
-    def __init__(self, company_dto: CompanyDTO):
-        self.id = company_dto.id
-        self.registration_date = company_dto.registration_date
-        self.renovation_date = company_dto.renovation_date
-        self.nit = company_dto.nit
-        self.acronym = company_dto.acronym
-        self.status = company_dto.status
-        self.validity = company_dto.validity
-        self.organization_type = company_dto.organization_type
-        self.registration_category = company_dto.registration_category
+    def __init__(self, company_data: CreateCompanyPayloadCommand | CompanyDTO):
+        self.company_id = company_data.id
+        self.nit = company_data.nit
+        self.acronym = company_data.acronym
+        self.status = company_data.status
+        self.validity = company_data.validity
+        self.organization_type = company_data.organization_type
+        self.registration_category = company_data.registration_category
 
 
 class CreateCompanyHandler(CreateCompanyBaseHandler):
 
     def handle(self, command_create_company: CreateCompany):
         company_dto = CompanyDTO(
-            id=command_create_company.id,
-            registration_date=command_create_company.registration_date,
-            renovation_date=command_create_company.renovation_date,
+            company_id=command_create_company.company_id,
             nit=command_create_company.nit,
             acronym=command_create_company.acronym,
             status=command_create_company.status,
@@ -49,11 +44,11 @@ class CreateCompanyHandler(CreateCompanyBaseHandler):
             registration_category=command_create_company.registration_category)
 
         company: Company = self.company_factory.create_object(company_dto, CompanyMapper())
-        company.create_company(company)
+        company.create_company()
 
         repository = self.repository_factory.create_object(CompanyRepository.__class__)
 
-        UnitWorkPort.register_batch(repository.agregar, company)
+        UnitWorkPort.register_batch(repository.add, company)
         UnitWorkPort.savepoint()
         UnitWorkPort.commit()
 

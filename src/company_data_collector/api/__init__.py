@@ -7,27 +7,28 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def record_handlers():
-    import company_data_collector.modules.company.application
+    from ..modules.company import application
 
 
 def import_alchemy_models():
-    import company_data_collector.modules.company.infrastructure.dto
+    from ..modules.company.infrastructure import dto
 
 
-def start_consumer():
+def start_consumer(app: Flask):
     import threading
-    import company_data_collector.modules.company.infrastructure.consumers as company
+    from ..modules.company.infrastructure import consumers as company
 
     threading.Thread(target=company.subscribe_to_events()).start()
 
-    threading.Thread(target=company.subscribe_to_commands()).start()
+    threading.Thread(target=company.subscribe_to_commands,
+                     args=[app.app_context(), app.test_request_context()]).start()
 
 
 def create_app(config={}):
     app = Flask(__name__, instance_relative_config=True)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL',
-                                                      'sqlite:///' + os.path.join(basedir, 'rs-alpes.db'))
+                                                      'sqlite:///' + os.path.join(basedir, 'company-data-collector.db'))
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
@@ -45,7 +46,7 @@ def create_app(config={}):
     with app.app_context():
         db.create_all()
         if not app.config.get('TESTING'):
-            start_consumer()
+            start_consumer(app)
 
     from . import company
     app.register_blueprint(company.bp)
@@ -54,7 +55,7 @@ def create_app(config={}):
     def spec():
         swag = swagger(app)
         swag['info']['version'] = "1.0"
-        swag['info']['title'] = "Real State Alpes API"
+        swag['info']['title'] = "rs-alpes - company_data_collector"
         return jsonify(swag)
 
     @app.route("/health")

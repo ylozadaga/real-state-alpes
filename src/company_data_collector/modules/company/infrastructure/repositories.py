@@ -1,13 +1,13 @@
-from company_data_collector.config.db import db
-from company_data_collector.modules.company.domain.repositories import CompanyRepository
-from company_data_collector.modules.company.domain.entities import Company
-from company_data_collector.modules.company.domain.factories import CompanyFactory
+from ....config.db import db
+from ..domain.repositories import CompanyRepository
+from ..domain.entities import Company
+from ..domain.factories import CompanyFactory
 from .dto import Company as CompanyDTO
 from .mappers import CompanyMapper
 from uuid import UUID
 
 
-class CompanyRepositorySQLite(CompanyRepository):
+class CompanySQLiteRepository(CompanyRepository):
 
     def __init__(self):
         self._company_factory: CompanyFactory = CompanyFactory()
@@ -24,8 +24,10 @@ class CompanyRepositorySQLite(CompanyRepository):
         raise NotImplementedError
 
     def add(self, company: Company):
-        reserva_dto = self.company_factory.create_object(company, CompanyMapper())
-        db.session.add(reserva_dto)
+        company_dto = self.company_factory.create_object(company, CompanyMapper())
+        db.session.add(company_dto)
+        db.session.commit()
+        db.session.refresh(company_dto)
 
     def update(self, company: Company):
         raise NotImplementedError

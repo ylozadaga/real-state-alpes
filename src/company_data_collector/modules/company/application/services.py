@@ -1,9 +1,9 @@
-from company_data_collector.seedwork.application.services import Service
-from company_data_collector.modules.company.domain.entities import Company
-from company_data_collector.modules.company.domain.factories import CompanyFactory
-from company_data_collector.modules.company.infrastructure.factories import RepositoryFactory
-from company_data_collector.modules.company.infrastructure.repositories import CompanyRepository
-from company_data_collector.seedwork.infrastructure.uow import UnitWorkPort
+from ....seedwork.application.services import Service
+from ..domain.entities import Company
+from ..domain.factories import CompanyFactory
+from ..infrastructure.factories import RepositoryFactory
+from ..infrastructure.repositories import CompanyRepository
+from ....seedwork.infrastructure.uow import UnitWorkPort
 from .mappers import CompanyMapper
 from .dto import CompanyDTO
 
@@ -23,8 +23,7 @@ class CompanyService(Service):
         return self._company_factory
 
     def create_company(self, company_dto: CompanyDTO) -> CompanyDTO:
-        company: Company = self.company_factory.create_object(company_dto, CompanyMapper)
-        company.create_company(company)
+        company: Company = self.company_factory.create_object(company_dto, CompanyMapper())
 
         repository = self.repository_factory.create_object(CompanyRepository.__class__)
 
@@ -32,4 +31,4 @@ class CompanyService(Service):
         UnitWorkPort.savepoint()
         UnitWorkPort.commit()
 
-        return self.company_factory.create_object(company, CompanyMapper)
+        return self.company_factory.create_object(company, CompanyMapper())

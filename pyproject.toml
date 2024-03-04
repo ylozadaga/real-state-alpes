@@ -7,7 +7,7 @@ authors = [
   { name="Marlon Agon", email="m.agonf@uniandes.edu.co" },
   { name="Yosef Lozada", email="y.lozada@uniandes.edu.co" },
 ]
-description = "POC RS Alpes"
+description = "Real State Alpes"
 readme = "README.md"
 requires-python = ">=3.10"
 

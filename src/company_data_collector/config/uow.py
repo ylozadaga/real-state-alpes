@@ -1,5 +1,5 @@
-from company_data_collector.config.db import db
-from company_data_collector.seedwork.infrastructure.uow import WorkUnit, Batch
+from ..config.db import db
+from ..seedwork.infrastructure.uow import WorkUnit, Batch
 
 
 class WorkUnitSQLAlchemy(WorkUnit):

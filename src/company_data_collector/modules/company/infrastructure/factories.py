@@ -1,8 +1,8 @@
-from dataclasses import dataclass, field
-from company_data_collector.seedwork.domain.factories import Factory
-from company_data_collector.seedwork.domain.repositories import Repository
-from company_data_collector.modules.company.domain.repositories import CompanyRepository
-from .repositories import CompanyRepositorySQLite
+from dataclasses import dataclass
+from ....seedwork.domain.factories import Factory
+from ....seedwork.domain.repositories import Repository
+from ....modules.company.domain.repositories import CompanyRepository
+from .repositories import CompanySQLiteRepository
 from .exceptions import FactoryException
 
 
@@ -10,6 +10,6 @@ from .exceptions import FactoryException
 class RepositoryFactory(Factory):
     def create_object(self, obj: type, mapper: any = None) -> Repository:
         if obj == CompanyRepository.__class__:
-            return CompanyRepositorySQLite()
+            return CompanySQLiteRepository()
         else:
             raise FactoryException()

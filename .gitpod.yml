@@ -9,7 +9,10 @@ tasks:
     command: pip install -r requirements.txt
   - name: Create Docker Images
     init: > 
-      docker build . -f rs-alpes.Dockerfile -t rs-alpes/flask &&
+      docker build . -f company_data_auditor.Dockerfile -t rs-alpes/company-data-auditor &&
+      docker build . -f company_data_collector.Dockerfile -t rs-alpes/company-data-collector &&
+      docker build . -f company_data_presenter.Dockerfile -t rs-alpes/company-data-presenter &&
+      docker build . -f company_data_processor.Dockerfile -t rs-alpes/company-data-processor &&
       docker build . -f notificator.Dockerfile -t rs-alpes/notificator &&
       gp sync-done images
   - name: Create Data Folder and Grand Permissions

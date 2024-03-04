@@ -1,10 +1,16 @@
 from pulsar.schema import *
-from company_data_collector.seedwork.infrastructure.schema.v1.commands import (IntegrationCommand)
+from ......seedwork.infrastructure.schema.v1.commands import (IntegrationCommand)
 
 
-class CommandCreateCompanyPayload(IntegrationCommand):
-    id_company = String()
+class CreateCompanyPayloadCommand(IntegrationCommand):
+    company_id = String()
+    nit = String()
+    acronym = String()
+    status = String()
+    validity = String()
+    organization_type = String()
+    registration_category = String()
 
 
-class CommandCreateCompany(IntegrationCommand):
-    data = CommandCreateCompanyPayload()
+class CreateCompanyCommand(IntegrationCommand):
+    data = CreateCompanyPayloadCommand()
