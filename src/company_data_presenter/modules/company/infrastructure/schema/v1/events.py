@@ -1,5 +1,5 @@
 from pulsar.schema import *
-from src.company_data_collector.seedwork.infrastructure.schema.v1.events import IntegrationEvent
+from ......seedwork.infrastructure.schema.v1.events import IntegrationEvent
 
 
 class CompanyCreatedPayload(Record):

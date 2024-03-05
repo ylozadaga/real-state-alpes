@@ -5,18 +5,17 @@ from flask_swagger import swagger
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-#AJUSTAR
 def record_handlers():
-    import company_data_presenter.modules.company.application
+    from ..modules.company import application
 
 
 def import_alchemy_models():
-    import company_data_presenter.modules.company.infrastructure.dto
+    from ..modules.company.infrastructure import dto
 
 
 def start_consumer():
     import threading
-    import company_data_presenter.modules.company.infrastructure.consumers as company
+    from ..modules.company.infrastructure import consumers as company
 
     threading.Thread(target=company.subscribe_to_events()).start()
 

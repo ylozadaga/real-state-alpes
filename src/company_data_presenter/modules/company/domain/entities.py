@@ -3,40 +3,23 @@ from __future__ import annotations
 from datetime import datetime
 from dataclasses import dataclass, field
 
-from company_data_presenter.seedwork.domain.entities import RootAggregation
-from company_data_presenter.modules.company.domain.events import CompanyCreated
+from ....seedwork.domain.entities import RootAggregation
+from ....modules.company.domain.events import CompanyCreated
 
 
 @dataclass
 class Company(RootAggregation):
-    id: str = None
-    registration_date: datetime = None
-    renovation_date: datetime = None
-    nit: str = None
-    acronym: str = None
-    status: str = None
-    validity: str = None
-    organization_type: str = None
-    registration_category: str = None
+    event_status: str = field(default="PENDING")
+    nit: str = field(default_factory=str)
+    acronym: str = field(default_factory=str)
+    status: str = field(default_factory=str)
+    validity: str = field(default_factory=str)
+    organization_type: str = field(default_factory=str)
+    registration_category: str = field(default_factory=str)
 
-    def create_company(self, company: Company):
-        self.id = company.id
-        self.registration_date = company.registration_date
-        self.renovation_date = company.renovation_date
-        self.nit = company.nit
-        self.acronym = company.acronym
-        self.status = company.status
-        self.validity = company.validity
-        self.organization_type = company.organization_type
-        self.registration_category = company.registration_category
-
+    def create_company(self):
         self.add_event(CompanyCreated(
-            id=self.id,
-            registration_date=self.registration_date,
-            renovation_date=self.renovation_date,
-            nit=self.nit,
-            acronym=self.acronym,
-            status=self.status,
-            validity=self.validity,
-            organization_type=self.organization_type,
-            registration_category=self.registration_category))
+            id_company=str(self.id),
+            event_status="IN_PROGRESS",
+            creation_date=datetime.now().isoformat()
+        ))

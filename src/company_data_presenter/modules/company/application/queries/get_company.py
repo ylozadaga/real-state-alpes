@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from company_data_presenter.seedwork.application.queries import Query, QueryHandler, QueryResult
-from company_data_presenter.seedwork.application.queries import execute_query as query
-from company_data_presenter.modules.company.infrastructure.repositories import CompanyRepository
+from .....seedwork.application.queries import Query, QueryHandler, QueryResult
+from .....seedwork.application.queries import execute_query as query
+from .....modules.company.infrastructure.repositories import CompanyRepository
 from .base import CompanyQueryBaseHandler
-from company_data_presenter.modules.company.application.mappers import CompanyMapper
+from .....modules.company.application.mappers import CompanyMapper
 import uuid
 
 

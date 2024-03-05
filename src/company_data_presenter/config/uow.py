@@ -1,7 +1,5 @@
-from typing import List, Any, Type
-
-from company_data_presenter.config.db import db
-from company_data_presenter.seedwork.infrastructure.uow import WorkUnit, Batch
+from ..config.db import db
+from ..seedwork.infrastructure.uow import WorkUnit, Batch
 
 
 class WorkUnitSQLAlchemy(WorkUnit):

@@ -1,6 +1,6 @@
-from company_data_presenter.seedwork.application.queries import QueryHandler
-from company_data_presenter.modules.company.infrastructure.factories import CompanyRepository
-from company_data_presenter.modules.company.domain.factories import CompanyFactory
+from ....seedwork.application.queries import QueryHandler
+from ....modules.company.infrastructure.factories import CompanyRepository
+from ....modules.company.domain.factories import CompanyFactory
 
 
 class CompanyQueryBaseHandler(QueryHandler):

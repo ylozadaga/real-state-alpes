@@ -1,7 +1,7 @@
-from company_data_presenter.config.db import db
-from company_data_presenter.modules.company.domain.repositories import CompanyRepository
-from company_data_presenter.modules.company.domain.entities import Company
-from company_data_presenter.modules.company.domain.factories import CompanyFactory
+from ....config.db import db
+from ....modules.company.domain.repositories import CompanyRepository
+from ....modules.company.domain.entities import Company
+from ....modules.company.domain.factories import CompanyFactory
 from .dto import Company as CompanyDTO
 from .mappers import CompanyMapper
 from uuid import UUID

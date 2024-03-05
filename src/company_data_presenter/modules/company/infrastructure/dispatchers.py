@@ -1,10 +1,10 @@
 import pulsar
 from pulsar.schema import *
-from company_data_presenter.modules.company.infrastructure.schema.v1.events import (EventCompanyCreated,
+from ....modules.company.infrastructure.schema.v1.events import (EventCompanyCreated,
                                                                                         CompanyCreatedPayload)
-from company_data_presenter.modules.company.infrastructure.schema.v1.commands import (CommandCreateCompany,
+from ....modules.company.infrastructure.schema.v1.commands import (CommandCreateCompany,
                                                                                           CommandCreateCompanyPayload)
-from company_data_presenter.seedwork.infrastructure import utils
+from ....seedwork.infrastructure import utils
 
 import datetime
 
