@@ -23,6 +23,7 @@ jobs:
 
   changes:
     runs-on: ubuntu-latest
+    if: false
     outputs:
       src: ${{ steps.changes.outputs.src }}
     steps:
@@ -59,7 +60,6 @@ jobs:
   build-image-deploy:
     name: push image and update service
     runs-on: ubuntu-latest
-    if: false
     # needs: unit-test
     needs: changes
     steps:
