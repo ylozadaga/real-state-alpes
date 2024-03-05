@@ -2,10 +2,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 4.16"
+      #version = "~> 3.0"
       #version = ">= 4.0.0"
     }
   }
+  required_version = ">= 1.2.0"
 }
 
 provider "aws" {
@@ -107,15 +109,3 @@ module "ecs" {
   internal_alb_target_groups  = module.internal_alb.target_groups
   public_alb_target_groups    = module.public_alb.target_groups
 }
-
-# resource "aws_elasticache_security_group" "default" {
-#   name                 = "${lower(var.app_name)}-redis-sg"
-#   security_group_names = [aws_security_group.redis.name]
-# }
-
-resource "aws_elasticache_subnet_group" "default" {
-  name       = "${lower(var.app_name)}-cache-subnet"
-  subnet_ids = module.vpc.public_subnets
-  # subnet_ids = ["${aws_subnet.default.*.id}"]
-}
-

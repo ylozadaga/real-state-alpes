@@ -75,7 +75,7 @@ public_alb_config = {
 
 #Microservices
 microservice_config = {
-  # "companies-collector" = {
+  # "company-collector" = {
   #   name             = "company-collector"
   #   is_public        = true
   #   container_port   = 80
@@ -101,7 +101,7 @@ microservice_config = {
   #     }
   #   }
   # }
-  # "companies-processor" = {
+  # "company-processor" = {
   #   name             = "company-processor"
   #   is_public        = true
   #   container_port   = 80
@@ -127,7 +127,7 @@ microservice_config = {
   #     }
   #   }
   # }
-  "companies-auditor" = {
+  "company-auditor" = {
     name             = "company-auditor"
     is_public        = true
     container_port   = 80
@@ -153,7 +153,7 @@ microservice_config = {
       }
     }
   }
-  # "companies-presenter" = {
+  # "company-presenter" = {
   #   name             = "company-presenter"
   #   is_public        = true
   #   container_port   = 80
