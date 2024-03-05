@@ -59,6 +59,7 @@ jobs:
   build-image-deploy:
     name: push image and update service
     runs-on: ubuntu-latest
+    if: false
     # needs: unit-test
     needs: changes
     steps:
