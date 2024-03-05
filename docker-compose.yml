@@ -102,7 +102,8 @@ services:
       - managedLedgerDefaultWriteQuorum=1
       - managedLedgerDefaultAckQuorum=1
       - advertisedAddress=broker
-      - advertisedListeners=external:pulsar://127.0.0.1:6650
+      # - advertisedListeners=external:pulsar://127.0.0.1:6650
+      - advertisedListeners=external:pulsar://broker:6650
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -221,7 +222,7 @@ services:
     networks:
       - company-data-presenter-net
 
-   company-data-presenter:
+  company-data-presenter:
      container_name: company-data-presenter
      hostname: company-data-presenter
      profiles: [ "rs-alpes", "company-data-presenter" ]
