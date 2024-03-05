@@ -33,7 +33,7 @@ def subscribe_to_events():
             client.close()
 
 
-def subscribe_to_commands(context: AppContext, req_context: RequestContext):
+def subscribe_to_commands():
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
@@ -48,7 +48,7 @@ def subscribe_to_commands(context: AppContext, req_context: RequestContext):
 
             data = message.value().data
             command = CreateCompanyCommand(data)
-            with context and req_context:
+            ##with context and req_context:
                 execute_command(command)
             consumer.acknowledge(message)
 

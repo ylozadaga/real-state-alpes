@@ -22,7 +22,7 @@ class CreateCompany(Command):
     registration_category: str
 
     def __init__(self, company_data: CreateCompanyPayloadCommand | CompanyDTO):
-        self.company_id = company_data.id
+        self.company_id = company_data.company_id
         self.nit = company_data.nit
         self.acronym = company_data.acronym
         self.status = company_data.status

@@ -32,7 +32,7 @@ class Dispatcher:
 
     def publish_command(self, command, topic):
         payload = CreateCompanyPayloadCommand(
-            id_company=str(command.id_company),
+            company_id=str(command.company_id),
             acronym=str(command.acronym),
             nit=str(command.nit),
             status=str(command.status),
