@@ -4,7 +4,7 @@ from company_data_auditor.api.v1.router import router as v1
 
 from company_data_auditor.modulos.infraestructura.consumidores import suscribirse_a_topico
 from company_data_auditor.modulos.infraestructura.v1.eventos import EventoCompanyAuditada, CompanyAuditada
-from company_data_auditor.modulos.infraestructura.v1.comandos import ComandoAuditarCompany
+from company_data_auditor.modulos.infraestructura.v1.comandos import ComandoAuditarCompany, AuditarCompany
 from company_data_auditor.modulos.infraestructura.despachadores import Despachador
 from company_data_auditor.seedwork.infraestructura import utils
 
@@ -24,6 +24,8 @@ async def app_startup():
     # task3 = asyncio.ensure_future(suscribirse_a_topico("comando-disable-company", "sub-com-disable-company", ComandoDesactivarCompany))
     tasks.append(task1)
     tasks.append(task2)
+    await prueba_auditar_company()
+    await prueba_company_auditada()
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -36,8 +38,8 @@ async def prueba_auditar_company() -> dict[str, str]:
     comando = ComandoAuditarCompany(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=CompanyAuditada.__name__,
-        data = CompanyAuditada(id = "1232321321", fecha_audit = utils.time_millis())
+        datacontenttype=AuditarCompany.__name__,
+        data = AuditarCompany(id = "1232321321", fecha_audit = utils.time_millis())
     )
     despachador = Despachador()
     despachador.publicar_mensaje(comando, "comando-auditar-company")

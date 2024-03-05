@@ -11,4 +11,5 @@ class Despachador:
         cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
         publicador = cliente.create_producer(topico, schema=AvroSchema(mensaje.__class__))
         publicador.send(mensaje)
+        print(f'mensaje publicado: {mensaje} {topico}')
         cliente.close()

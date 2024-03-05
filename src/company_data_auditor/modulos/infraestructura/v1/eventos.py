@@ -12,7 +12,7 @@ class EventoCompanyAuditada(EventoIntegracion):
     time = Long()
     ingestion = Long(default=time_millis())
     specversion = String(default="v1")
-    type = String(default="EventoCompanyAuditada")
+    type = String(default="EventCompanyAuditada")
     datacontenttype = String()
     service_name = String(default="company-auditor-pda")
     audited = CompanyAuditada

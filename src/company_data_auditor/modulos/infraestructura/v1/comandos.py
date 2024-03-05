@@ -12,7 +12,7 @@ class ComandoAuditarCompany(ComandoIntegracion):
     time = Long()
     ingestion = Long(default=time_millis())
     specversion = String(default="v1")
-    type = String(default="ValidarUsuario")
+    type = String(default="CommandAuditarCompany")
     datacontenttype = String()
     service_name = String(default="company-auditor-pda")
     data = AuditarCompany

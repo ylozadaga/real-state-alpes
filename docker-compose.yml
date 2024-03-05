@@ -153,6 +153,7 @@ services:
       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@company-data-auditor_db:5432/company-data-auditor
       - PULSAR_ADDRESS=broker
       - BROKER_HOST=broker
+      - PYTHONUNBUFFERED=1      
     ports:
       - "5000:5000"
     networks:
