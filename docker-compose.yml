@@ -14,7 +14,6 @@ networks:
     driver: bridge
 
 services:
-
 # Start zookeeper
 
   zookeeper:
@@ -103,7 +102,8 @@ services:
       - managedLedgerDefaultWriteQuorum=1
       - managedLedgerDefaultAckQuorum=1
       - advertisedAddress=broker
-      - advertisedListeners=external:pulsar://127.0.0.1:6650
+      # - advertisedListeners=external:pulsar://127.0.0.1:6650
+      - advertisedListeners=external:pulsar://broker:6650
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -150,7 +150,7 @@ services:
         condition: service_healthy
     environment:
       - RS_ALPES_ADDRESS=company-data-auditor
-      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-auditor
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@company-data-auditor_db:5432/company-data-auditor
       - PULSAR_ADDRESS=broker
       - BROKER_HOST=broker
     ports:
@@ -192,7 +192,7 @@ services:
         condition: service_healthy
     environment:
       - RS_ALPES_ADDRESS=company-data-collector
-      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-collector
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@company-data-collector_db:5432/company-data-collector
       - PULSAR_ADDRESS=broker
       - BROKER_HOST=broker
     ports:
@@ -222,27 +222,27 @@ services:
     networks:
       - company-data-presenter-net
 
-  # company-data-presenter:
-  #   container_name: company-data-presenter
-  #   hostname: company-data-presenter
-  #   profiles: [ "rs-alpes", "company-data-presenter" ]
-  #   build:
-  #     context: .
-  #     dockerfile: company_data_presenter.Dockerfile
-  #   depends_on:
-  #     company-data-presenter_db:
-  #       condition: service_healthy
-  #   environment:
-  #     - RS_ALPES_ADDRESS=company-data-presenter
-  #     - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-presenter
-  #     - PULSAR_ADDRESS=broker
-  #     - BROKER_HOST=broker
-  #   ports:
-  #     - "5002:5000"
-  #   networks:
-  #     - app-net
-  #     - company-data-presenter-net
-  #     - pulsar-net
+  company-data-presenter:
+     container_name: company-data-presenter
+     hostname: company-data-presenter
+     profiles: [ "rs-alpes", "company-data-presenter" ]
+     build:
+       context: .
+       dockerfile: company_data_presenter.Dockerfile
+     depends_on:
+       company-data-presenter_db:
+         condition: service_healthy
+     environment:
+       - RS_ALPES_ADDRESS=company-data-presenter
+       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@company-data-presenter_db:5432/company-data-presenter
+       - PULSAR_ADDRESS=broker
+       - BROKER_HOST=broker
+     ports:
+       - "5002:5000"
+     networks:
+       - app-net
+       - company-data-presenter-net
+       - pulsar-net
 
   company-data-processor_db:
     image: postgres:latest
@@ -264,27 +264,27 @@ services:
     networks:
       - company-data-processor-net
 
-  # company-data-processor:
-  #   container_name: company-data-processor
-  #   hostname: company-data-processor
-  #   profiles: [ "rs-alpes", "company_data_processor" ]
-  #   build:
-  #     context: .
-  #     dockerfile: company_data_processor.Dockerfile
-  #   depends_on:
-  #     company-data-processor_db:
-  #       condition: service_healthy
-  #   environment:
-  #     - RS_ALPES_ADDRESS=company-data-processor
-  #     - DATABASE_URL=postgresql+psycopg2://postgres:postgres@postgres:5432/company-data-processor
-  #     - PULSAR_ADDRESS=broker
-  #     - BROKER_HOST=broker
-  #   ports:
-  #     - "5003:5000"
-  #   networks:
-  #     - app-net
-  #     - company-data-processor-net
-  #     - pulsar-net
+  company-data-processor:
+     container_name: company-data-processor
+     hostname: company-data-processor
+     profiles: [ "rs-alpes", "company_data_processor" ]
+     build:
+       context: .
+       dockerfile: company_data_processor.Dockerfile
+     depends_on:
+       company-data-processor_db:
+         condition: service_healthy
+     environment:
+       - RS_ALPES_ADDRESS=company-data-processor
+       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@company-data-processor_db:5432/company-data-processor
+       - PULSAR_ADDRESS=broker
+       - BROKER_HOST=broker
+     ports:
+       - "5003:5000"
+     networks:
+       - app-net
+       - company-data-processor-net
+       - pulsar-net
 
 
 # Notification Services

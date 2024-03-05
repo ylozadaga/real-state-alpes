@@ -2,8 +2,9 @@ FROM python:3.10
 
 EXPOSE 5000/tcp
 
-RUN apt update \
-    && apt install libpq-dev -y
+RUN apt-get update && \
+    apt-get install -y libpq-dev && \
+    apt-get clean
 
 WORKDIR "/src"
 
