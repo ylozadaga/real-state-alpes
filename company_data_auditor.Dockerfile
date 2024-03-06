@@ -1,12 +1,14 @@
 FROM python:3.10
 LABEL author="m.agonf@uniandes.edu.co"
 EXPOSE 5000/tcp
-WORKDIR /app
 RUN apt update \
     && apt install libpq-dev -y
-COPY requirements.txt /app
+COPY company-auditor-requirements.txt /app
 RUN pip install --upgrade --no-cache-dir pip setuptools wheel
 RUN pip install --no-cache-dir wheel
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app
-CMD [ "uvicorn", "main:app", "--host=0.0.0.0"]
+COPY . .
+WORKDIR "/src"
+#CMD [ "flask", "--app", "./src/company_data_auditor/api", "run", "--host=0.0.0.0"]
+CMD [ "uvicorn", "company_data_auditor.main:app", "--host=0.0.0.0"]
+
