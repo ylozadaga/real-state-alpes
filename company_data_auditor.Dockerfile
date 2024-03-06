@@ -7,7 +7,7 @@ RUN apt update \
 COPY company-auditor-requirements.txt ./
 RUN pip install --upgrade --no-cache-dir pip setuptools wheel
 RUN pip install --no-cache-dir wheel
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r company-auditor-requirements.txt
 
 COPY . .
 WORKDIR "/src"
