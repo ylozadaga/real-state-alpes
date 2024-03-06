@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/test-build-deploy.yml
     with:
        microservice: company-auditor
-       microservice-path: ./src/company_data_auditor
+       microservice-path: ./company_data_auditor
     secrets: inherit
 
   # company-collector:
