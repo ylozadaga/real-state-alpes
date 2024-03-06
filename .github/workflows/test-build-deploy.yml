@@ -23,7 +23,7 @@ jobs:
 
   changes:
     runs-on: ubuntu-latest
-    if: false
+    #if: false
     outputs:
       src: ${{ steps.changes.outputs.src }}
     steps:
