@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.10
 LABEL author="m.agonf@uniandes.edu.co"
 EXPOSE 5000/tcp
 WORKDIR /app
