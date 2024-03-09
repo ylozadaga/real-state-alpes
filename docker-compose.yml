@@ -308,3 +308,26 @@ services:
       - PULSAR_ADDRESS=broker
     networks:
       - pulsar-net
+
+  #BFF
+  bff:
+    container_name: bff
+    hostname: bff
+    profiles: [ "rs-alpes", "bff" ]
+    build:
+      context: .
+      dockerfile: bff.Dockerfile
+    depends_on:
+     - company-data-presenter
+     - broker
+    environment:
+     - RS_ALPES_ADDRESS=bff
+     - BROKER_HOST=broker
+    networks:
+     - pulsar
+    ports:
+     - "8003:8003" 
+
+
+
+
