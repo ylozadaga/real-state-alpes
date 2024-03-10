@@ -10,7 +10,18 @@ RS_ALPES_HOST = os.getenv("RS_ALPES_ADDRESS", default="localhost")
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 
-def get_companies(root) -> typing.List["Company"]:
+def get_company(root, id) -> typing.List["Company"]:
+    companies_json = requests.get(f"http://{RS_ALPES_HOST}:5000/presenter/companies/private/" + id).json()  # TODO VERIFICAR URI
+    return Company(
+                id = company.get('id'),
+                nit = company.get('nit', ''),
+                status = company.get('status', ''),
+                organization_type = company.get('organization_type', ''),
+                registration_category = company.get('registration_category', ''),
+                registration_date = datetime.strptime(company.get('registration_date', DATE_FORMAT))
+            ) 
+
+def get_companies(root) -> Company:
     companies_json = requests.get(f"http://{RS_ALPES_HOST}:5000/presenter/companies/private").json()  # TODO VERIFICAR URI
     companies = []
 
@@ -26,7 +37,6 @@ def get_companies(root) -> typing.List["Company"]:
             )
         )
     return companies
-
 
 @strawberry.type
 class Company:
