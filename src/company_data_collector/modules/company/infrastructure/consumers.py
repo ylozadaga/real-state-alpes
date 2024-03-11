@@ -49,7 +49,7 @@ def subscribe_to_commands():
             data = message.value().data
             command = CreateCompanyCommand(data)
             ##with context and req_context:
-                execute_command(command)
+            execute_command(command)
             consumer.acknowledge(message)
 
         client.close()
