@@ -24,19 +24,19 @@ jobs:
     uses: ./.github/workflows/test-build-deploy.yml
     with:
        microservice: company-collector
-       microservice-path: ./src/company_data_collector
+       microservice-path: ./company_data_collector
     secrets: inherit
 
   company-processor:
     uses: ./.github/workflows/test-build-deploy.yml
     with:
       microservice: company-processor
-      microservice-path: ./src/company_data_processor
+      microservice-path: ./company_data_processor
     secrets: inherit
       
   company-presenter:
     uses: ./.github/workflows/test-build-deploy.yml
     with:
       microservice: company-presenter
-      microservice-path: ./src/company_data_presenter
+      microservice-path: ./company_data_presenter
     secrets: inherit

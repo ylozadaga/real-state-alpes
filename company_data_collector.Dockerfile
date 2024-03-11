@@ -4,10 +4,10 @@ RUN apt-get update && \
     apt-get install -y libpq-dev && \
     apt-get clean
 
-COPY company-collector-requirements.txt ./
+COPY requirements.txt ./
 RUN pip install --upgrade --no-cache-dir pip setuptools wheel
 RUN pip install --no-cache-dir wheel
-RUN pip install --no-cache-dir -r company-collector-requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 WORKDIR "/src"

@@ -1,7 +1,5 @@
 FROM python:3.10
-
 EXPOSE 5000/tcp
-
 RUN apt update \
     && apt install libpq-dev -y
 
@@ -11,5 +9,4 @@ RUN pip install --no-cache-dir wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-CMD [ "flask", "--app", "./src/company_data_processor/api", "run", "--host=0.0.0.0"]
+CMD [ "flask", "--app", "./company_data_processor/api", "run", "--host=0.0.0.0"]
