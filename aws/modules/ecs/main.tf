@@ -28,6 +28,10 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       essential    = true
       # secrets = [
       #   {
+      #     name      = "BROKER_HOST"
+      #     valueFrom = "arn:aws:secretsmanager ..."
+      #   },
+      #   {
       #     name      = "CACHE_PATH"
       #     valueFrom = "arn:aws:secretsmanager:us-east-1:101526122836:secret:redis_host-bDx9aw"
       #   },

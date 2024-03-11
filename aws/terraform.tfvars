@@ -75,58 +75,58 @@ public_alb_config = {
 
 #Microservices
 microservice_config = {
-  # "company-collector" = {
-  #   name             = "company-collector"
-  #   is_public        = true
-  #   container_port   = 80
-  #   host_port        = 80
-  #   cpu              = 256
-  #   memory           = 512
-  #   desired_count    = 1
-  #   alb_target_group = {
-  #     port              = 80
-  #     protocol          = "HTTP"
-  #     path_pattern      = ["/company-collector*"]
-  #     health_check_path = "/company-collector/ping"
-  #     priority          = 1
-  #   }
-  #   auto_scaling = {
-  #     max_capacity = 2
-  #     min_capacity = 1
-  #     cpu          = {
-  #       target_value = 75
-  #     }
-  #     memory = {
-  #       target_value = 75
-  #     }
-  #   }
-  # }
-  # "company-processor" = {
-  #   name             = "company-processor"
-  #   is_public        = true
-  #   container_port   = 80
-  #   host_port        = 80
-  #   cpu              = 256
-  #   memory           = 512
-  #   desired_count    = 1
-  #   alb_target_group = {
-  #     port              = 80
-  #     protocol          = "HTTP"
-  #     path_pattern      = ["/company-processor*"]
-  #     health_check_path = "/company-processor/ping"
-  #     priority          = 1
-  #   }
-  #   auto_scaling = {
-  #     max_capacity = 2
-  #     min_capacity = 1
-  #     cpu          = {
-  #       target_value = 75
-  #     }
-  #     memory = {
-  #       target_value = 75
-  #     }
-  #   }
-  # }
+  "company-collector" = {
+    name             = "company-collector"
+    is_public        = true
+    container_port   = 80
+    host_port        = 80
+    cpu              = 256
+    memory           = 512
+    desired_count    = 1
+    alb_target_group = {
+      port              = 80
+      protocol          = "HTTP"
+      path_pattern      = ["/company-collector*"]
+      health_check_path = "/company-collector/ping"
+      priority          = 1
+    }
+    auto_scaling = {
+      max_capacity = 2
+      min_capacity = 1
+      cpu          = {
+        target_value = 75
+      }
+      memory = {
+        target_value = 75
+      }
+    }
+  }
+  "company-processor" = {
+    name             = "company-processor"
+    is_public        = true
+    container_port   = 80
+    host_port        = 80
+    cpu              = 256
+    memory           = 512
+    desired_count    = 1
+    alb_target_group = {
+      port              = 80
+      protocol          = "HTTP"
+      path_pattern      = ["/company-processor*"]
+      health_check_path = "/company-processor/ping"
+      priority          = 1
+    }
+    auto_scaling = {
+      max_capacity = 2
+      min_capacity = 1
+      cpu          = {
+        target_value = 75
+      }
+      memory = {
+        target_value = 75
+      }
+    }
+  }
   "company-auditor" = {
     name             = "company-auditor"
     is_public        = true
@@ -153,30 +153,30 @@ microservice_config = {
       }
     }
   }
-  # "company-presenter" = {
-  #   name             = "company-presenter"
-  #   is_public        = true
-  #   container_port   = 80
-  #   host_port        = 80
-  #   cpu              = 256
-  #   memory           = 512
-  #   desired_count    = 1
-  #   alb_target_group = {
-  #     port              = 80
-  #     protocol          = "HTTP"
-  #     path_pattern      = ["/company-presenter*"]
-  #     health_check_path = "/company-presenter/ping"
-  #     priority          = 1
-  #   }
-  #   auto_scaling = {
-  #     max_capacity = 2
-  #     min_capacity = 1
-  #     cpu          = {
-  #       target_value = 75
-  #     }
-  #     memory = {
-  #       target_value = 75
-  #     }
-  #   }
-  # }
+  "company-presenter" = {
+    name             = "company-presenter"
+    is_public        = true
+    container_port   = 80
+    host_port        = 80
+    cpu              = 256
+    memory           = 512
+    desired_count    = 1
+    alb_target_group = {
+      port              = 80
+      protocol          = "HTTP"
+      path_pattern      = ["/company-presenter*"]
+      health_check_path = "/company-presenter/ping"
+      priority          = 1
+    }
+    auto_scaling = {
+      max_capacity = 2
+      min_capacity = 1
+      cpu          = {
+        target_value = 75
+      }
+      memory = {
+        target_value = 75
+      }
+    }
+  }
 }
