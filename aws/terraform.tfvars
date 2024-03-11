@@ -4,7 +4,7 @@ region       = "us-east-1"
 profile      = "default"
 app_name     = "rs-alpes"
 env          = "dev"
-app_services = ["company-auditor"] # "company-collector", "company-processor", "company-presenter"
+app_services = ["company-auditor", "company-collector", "company-processor", "company-presenter"]
 
 #VPC configurations
 cidr               = "10.10.0.0/16"
