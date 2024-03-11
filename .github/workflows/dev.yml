@@ -1,0 +1,42 @@
+# Ejemplo de github action para probar python
+# Docs: https://docs.github.com/es/actions/using-workflows/workflow-syntax-for-github-actions
+name: CI/CD-Develop
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches: 
+      - develop
+
+# check for run job based on file changes in GitHub Actions
+# https://how.wtf/run-workflow-step-or-job-based-on-file-changes-github-actions.html
+jobs:
+  company-auditor:
+    uses: ./.github/workflows/test-build-deploy.yml
+    with:
+       microservice: company-auditor
+       microservice-path: ./company_data_auditor
+    secrets: inherit
+
+  company-collector:
+    uses: ./.github/workflows/test-build-deploy.yml
+    with:
+       microservice: company-collector
+       microservice-path: ./company_data_collector
+    secrets: inherit
+
+  company-processor:
+    uses: ./.github/workflows/test-build-deploy.yml
+    with:
+      microservice: company-processor
+      microservice-path: ./company_data_processor
+    secrets: inherit
+      
+  company-presenter:
+    uses: ./.github/workflows/test-build-deploy.yml
+    with:
+      microservice: company-presenter
+      microservice-path: ./company_data_presenter
+    secrets: inherit
