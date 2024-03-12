@@ -12,7 +12,7 @@ from company_data_presenter.modules.company.infrastructure.dispatchers import Di
 from company_data_presenter.seedwork.domain.exceptions import DomainException
 
 
-bp = api.create_blueprint('company', '/company')
+bp = api.create_blueprint('presenter', '/presenter')
 
 dispatcher = Dispatcher()
 
